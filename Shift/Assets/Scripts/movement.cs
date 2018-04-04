@@ -34,34 +34,42 @@ public class movement : MonoBehaviour
 
 	void Update()
 	{
-
-        Quaternion deltaRotation = Quaternion.Euler(0,Input.GetAxis("Mouse X")*SensitivityX,0);
-
-
-        rotationY +=Input.GetAxis("Mouse Y")*SensitivityY;
-
-        rotationY=Mathf.Clamp( rotationY, MinY, MaxY );
-		
+        rotationY += Input.GetAxis("Mouse Y")*SensitivityY;
+        rotationY = Mathf.Clamp( rotationY, MinY, MaxY );
 		cam.transform.localEulerAngles = new Vector3( -rotationY, 0, 0 );
 
 
-		rb.MoveRotation(Quaternion.Euler( rb.rotation.eulerAngles + deltaRotation.eulerAngles ));
+		Quaternion deltaRotation = Quaternion.Euler(0,Input.GetAxis("Mouse X")*SensitivityX,0);
+		transform.Rotate(deltaRotation.eulerAngles);
+		//rb.MoveRotation(Quaternion.Euler( rb.rotation.eulerAngles + deltaRotation.eulerAngles ));
 
 		
 		if(Input.anyKeyDown)
 		{
 			if(Input.GetKeyDown(KeyCode.W))
+			{
 				shifter.movement = Direction.forward;
+			}
 			if(Input.GetKeyDown(KeyCode.S))
+			{
 				shifter.movement = Direction.backward;
+			}
 			if(Input.GetKeyDown(KeyCode.A))
+			{
 				shifter.movement = Direction.left;
+			}
 			if(Input.GetKeyDown(KeyCode.D))
+			{
 				shifter.movement = Direction.right;
+			}
 			if(Input.GetKeyDown(KeyCode.LeftShift))
 			{
 				shifter.Shift();
 			}
+		}
+		else if (!Input.anyKey)
+		{
+			shifter.movement = Direction.none;
 		}
 		rb.velocity=(transform.right*Input.GetAxisRaw("Horizontal") +transform.forward* Input.GetAxisRaw("Vertical"))*speed;
 	}
