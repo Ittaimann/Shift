@@ -3,12 +3,11 @@ using System.Collections;
 
 public class movement : MonoBehaviour
 {
-	public ShiftOrientation shifter;
+	public Orientation orientation;
     public float speed = 6.0F;
     public float jumpSpeed = 8.0F;
     public float gravityForce = 20.0F;
 	private Rigidbody rb;
-	private Vector3 gravityVector;
 
     float rotationY = 0F;
 	public float MinY;
@@ -23,7 +22,7 @@ public class movement : MonoBehaviour
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
-		shifter = GetComponent<ShiftOrientation>();
+		orientation = GetComponent<Orientation>();
 	
 	}
 	void Start()
@@ -48,29 +47,30 @@ public class movement : MonoBehaviour
 		{
 			if(Input.GetKeyDown(KeyCode.W))
 			{
-				shifter.movement = Direction.forward;
+				orientation.movement = Direction.forward;
 			}
 			if(Input.GetKeyDown(KeyCode.S))
 			{
-				shifter.movement = Direction.backward;
+				orientation.movement = Direction.backward;
 			}
 			if(Input.GetKeyDown(KeyCode.A))
 			{
-				shifter.movement = Direction.left;
+				orientation.movement = Direction.left;
 			}
 			if(Input.GetKeyDown(KeyCode.D))
 			{
-				shifter.movement = Direction.right;
+				orientation.movement = Direction.right;
 			}
 			if(Input.GetKeyDown(KeyCode.LeftShift))
 			{
-				shifter.Shift();
+				orientation.Shift();
 			}
 		}
 		else if (!Input.anyKey)
 		{
-			shifter.movement = Direction.none;
+			orientation.movement = Direction.none;
 		}
 		rb.velocity=(transform.right*Input.GetAxisRaw("Horizontal") +transform.forward* Input.GetAxisRaw("Vertical"))*speed;
+		rb.AddRelativeForce(orientation.gravity*gravityForce);
 	}
 }
